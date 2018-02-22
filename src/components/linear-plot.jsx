@@ -10,9 +10,18 @@ type Props = {
   stroke: string,
   fill: string,
   strokeWidth: number,
+  interpolationType: func,
 };
 
-export default class scatterPlot extends React.Component<Props> {
+export default class LinearPlot extends React.Component<Props> {
+  line = () => {
+    return d3
+      .line()
+      .x(d => this.xScale()(d.x))
+      .y(d => this.yScale()(d.y))
+      .curve(this.props.interpolationType)
+  }
+
   // Returns the largest X coordinate from the data set
   xMax = (data: Object) => d3.max(data, d => d.x)
 
@@ -20,7 +29,7 @@ export default class scatterPlot extends React.Component<Props> {
   yMax = (data: Object) => d3.max(data, d => d.y)
 
   // Returns a function that "scales" X coordinates from the data to fit the chart
-  xScale = (props: Object) => {
+  xScale = () => {
     return d3
       .scaleLinear()
       .range([this.props.padding, this.props.width - this.props.padding * 2])
@@ -28,7 +37,7 @@ export default class scatterPlot extends React.Component<Props> {
   }
 
   // Returns a function that "scales" Y coordinates from the data to fit the chart
-  yScale = (props: Object) => {
+  yScale = () => {
     return d3
       .scaleLinear()
       .range([this.props.padding, this.props.height - this.props.padding]) // switch these two value to reverse Y asix but not work
@@ -36,18 +45,15 @@ export default class scatterPlot extends React.Component<Props> {
   }
 
   render() {
+    const { data, stroke, fill, strokeWidth } = this.props;
     return (
       <g>
-        {this.props.data.map((coords, index) => (
-          <circle
-            key={index}
-            cx={this.xScale()(coords.x)}
-            cy={this.yScale()(coords.y)}
-            r={this.props.strokeWidth}
-            stroke={this.props.stroke}
-            fill={this.props.fill}
-          />
-        ))}
+        <path
+         d={this.line()(data)}
+         fill={'white'}
+         stroke={stroke}
+         strokeWidth={strokeWidth} 
+        />
       </g>
     )
   }
