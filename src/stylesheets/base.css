@@ -25,28 +25,3 @@ body {
     background: grey; }
   .randomize:focus {
     outline: 0; }
-
-.sub-toolbar {
-  display: inline-block;
-  width: 200px; }
-
-.sub-button {
-  width: 1px;
-  margin: 10px;
-  padding-left: 10px;
-  text-align: left;
-  cursor: pointer;
-  border-bottom: 1px solid white;
-  transition: all 0.1s linear; }
-  .sub-button.is-active {
-    margin-bottom: 15px;
-    padding-left: 5px;
-    width: 100%;
-    border-bottom: 1px solid black;
-    transition: all 0.5s linear; }
-  .sub-button:after {
-    content: '-';
-    margin-left: 10px;
-    opacity: 0.01; }
-  .sub-button.is-active:after {
-    opacity: 1; }
