@@ -1,3 +1,4 @@
 @import './stylesheets/base.css';
 @import './stylesheets/sub-toolbar.css';
+@import './stylesheets/variables.scss';
 @import './stylesheets/variables.css';

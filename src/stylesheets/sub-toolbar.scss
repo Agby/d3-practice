@@ -1,3 +1,5 @@
+@import './variables.scss';
+
 .sub-toolbar {
   display: inline-block;
   width: 200px;
@@ -7,6 +9,7 @@
   border-bottom: 1px solid $white;
   cursor: pointer;
   margin: 10px;
+  height: 25px;
   padding-left: 10px;
   text-align: left;
   transition: all 0.1s linear;
@@ -14,9 +17,8 @@
 
   &.is-active {
     border-bottom: 1px solid $black;
-    margin-bottom: 15px;
     padding-left: 5px;
-    transition: all 0.3s linear;
+    transition: all 0.25s linear;
     width: 100%;
   }
 
