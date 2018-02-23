@@ -1,5 +1,6 @@
 {
   "extends": [
+    "airbnb",
     "airbnb-base",
     "plugin:flowtype/recommended",
     "plugin:react/recommended",
@@ -49,13 +50,13 @@
     "react/no-did-update-set-state": 1,
     "react/no-multi-comp": 1,
     "react/no-unknown-property": 1,
+    "react/no-unused-prop-types": 0,
+    "react/no-array-index-key": 0,
     "react/prop-types": 0,
     "react/self-closing-comp": 1,
     "react/sort-comp": 0,
+    "jsx-a11y/href-no-hash": "0",
     "template-curly-spacing": 0
   },
-  "plugins": ["flowtype", "react", "prettier"],
-  "ecmaFeatures": {
-    "jsx": true
-  },
+  "plugins": ["flowtype", "react", "prettier"]
 }

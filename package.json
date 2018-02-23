@@ -6,10 +6,12 @@
     "babel-eslint": "^8.2.2",
     "d3": "^4.13.0",
     "eslint": "^4.18.1",
-    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-config-airbnb": "^16.1.0",
     "eslint-config-prettier": "^2.9.0",
+    "eslint-config-react-app": "^2.1.0",
     "eslint-plugin-flowtype": "^2.46.0",
     "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-prettier": "^2.6.0",
     "eslint-plugin-react": "^7.7.0",
     "flow-bin": "^0.66.0",
@@ -19,19 +21,29 @@
     "npm-run-all": "^4.1.2",
     "prettier": "^1.10.2",
     "react": "^16.2.0",
+    "react-app": "^1.1.2",
     "react-dom": "^16.2.0",
-    "react-scripts": "1.1.1"
+    "react-scripts": "1.1.1",
+    "stylelint": "^9.1.1",
+    "stylelint-config-sass-guidelines": "^4.1.0",
+    "stylelint-order": "^0.8.1",
+    "stylelint-scss": "^2.4.0"
   },
   "lint-staged": {
-    "src/**/*.{js,jsx,json,scss,css}": [
+    "src/**/*.{js,jsx}": [
       "prettier --single-quote --trailing-comma all --semi false --write",
       "eslint --fix",
+      "git add"
+    ],
+    "src/**/*.{scss}": [
+      "prettier --single-quote --trailing-comma all --semi false --write",
+      "stylelint --fix",
       "git add"
     ]
   },
   "scripts": {
     "check": "lint-staged && flow",
-    "flow": "flow",
+    "precommit": "lint-staged && flow",
     "build-css": "node-sass-chokidar src/ -o src/",
     "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
     "start-js": "react-scripts start",

@@ -3,31 +3,36 @@
 }
 
 body {
+  font-family: sans-serif;
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
 }
 
 .App {
   text-align: center;
 }
+
 .controls {
   display: flex;
   justify-content: center;
 }
+
 .randomize {
-  width: 100px;
-  margin: 20px 10px;
   cursor: pointer;
+  margin: 20px 10px;
   transition: all 0.1s linear;
+  width: 100px;
+
   &.is-active {
-  	background: grey;
-  	color: white;
+    background: $grey;
+    color: $white;
   }
+
   &:hover {
-    background: grey;
+    background: $grey;
   }
+
   &:focus {
-  	outline: 0;
+    outline: 0;
   }
 }

@@ -17,15 +17,21 @@ const interpolationTypes = {
   curveStepBefore: d3.curveStepBefore,
 }
 
-const renderSubToolBar = (props) => (
+const renderSubToolBar = (props: {
+  interpolationType: Function,
+  onSelectSubType: Function,
+}) => (
   <div className="sub-toolbar">
     {Object.keys(interpolationTypes).map(key => (
-      <div 
-      	key={key}
-      	className={`sub-button ${props.interpolationType === interpolationTypes[key] ? 'is-active' : null}`}
-      	onMouseOver={() => props.onSelectSubType(interpolationTypes[key])}
+      <div
+        key={key}
+        className={`sub-button ${
+          props.interpolationType === interpolationTypes[key] ? 'is-active' : ''
+        }`}
+        onMouseOver={() => props.onSelectSubType(interpolationTypes[key])}
+        onFocus={() => props.onSelectSubType(interpolationTypes[key])}
       >
-      	{key}
+        {key}
       </div>
     ))}
   </div>

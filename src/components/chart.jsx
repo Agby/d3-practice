@@ -1,8 +1,11 @@
+// @flow
+
 import React from 'react'
+import * as d3 from 'd3'
+import Utils from '../shared/utils'
 import ScatterPlot from './scatter-plot.jsx'
 import LinearPlot from './linear-plot.jsx'
 import SubToolBar from './sub-toolbar.jsx'
-import * as d3 from 'd3'
 
 const styles = {
   width: 600,
@@ -17,83 +20,123 @@ const numDataPoints = 50
 const randomNum = () => Math.floor(Math.random() * 1000)
 
 // A function that creates an array of 30 elements of (x, y) coordinates.
-const randomScatterDataSet = () => Array(...{ length: numDataPoints }).map(() => ({
+const randomScatterDataSet = () =>
+  new Array(numDataPoints).fill().map((a, index) => ({
     x: randomNum(),
     y: randomNum(),
   }))
 
 // A function that creates an array of 30 elements of (n, y) coordinates.
-const randomLinearDataSet = () => Array(...{ length: numDataPoints }).map((value, index) => ({
+const randomLinearDataSet = () =>
+  new Array(numDataPoints).fill().map((a, index) => ({
     x: index,
     y: randomNum(),
   }))
 
-export default class Chart extends React.Component {
-  constructor(props) {
+type Props = {}
+type State = {
+  chartMode: string,
+  data: Array<Object>,
+  subSettings: Object,
+  interpolationType: Function,
+}
+
+export default class Chart extends React.Component<Props, State> {
+  constructor(props: Object) {
     super(props)
     this.state = {
       chartMode: 'scatter',
       data: randomScatterDataSet(),
-      stroke: 'black',
-      fill: 'grey',
-      strokeWidth:  3,
-      interpolationType: null,
+      subSettings: {
+        stroke: 'black',
+        fill: 'white',
+        strokeWidth: 3,
+      },
+      interpolationType: d3.curveLinear,
     }
   }
-  
+
   handleMouseOver(mode: string) {
-    switch(mode) {
+    switch (mode) {
       case 'scatter':
-        this.setState({
-          chartMode: mode,
-          data: randomScatterDataSet(),
-          interpolationType: null,
-        })
+        if (this.state.chartMode !== 'scatter')
+          this.setState({
+            chartMode: mode,
+            data: randomScatterDataSet(),
+          })
         break
       case 'linear':
-        this.setState({
-          chartMode: mode,
-          data: randomLinearDataSet(),
-          interpolationType: d3.curveLinear,
-        })
+        if (this.state.chartMode !== 'linear')
+          this.setState({
+            chartMode: mode,
+            data: randomLinearDataSet(),
+            interpolationType: d3.curveLinear,
+          })
         break
       default:
         this.setState({
           chartMode: mode,
           data: randomScatterDataSet(),
-          interpolationType: null,
         })
         break
     }
   }
-  handleSelectSubType(interpolationType) {
-    this.setState({interpolationType})
+
+  handleSelectSubType(interpolationType: Function) {
+    this.setState({ interpolationType })
   }
+
   renderChart() {
-    switch(this.state.chartMode) {
+    const scaleData = {
+      rangeX: [styles.padding, styles.width - styles.padding * 2],
+      domainX: [0, Utils.max(this.state.data, 'x')],
+      rangeY: [styles.padding, styles.height - styles.padding],
+      domainY: [0, Utils.max(this.state.data, 'y')],
+    }
+
+    switch (this.state.chartMode) {
       case 'scatter':
-        return (<ScatterPlot {...this.state} {...styles} />)
+        return (
+          <ScatterPlot
+            data={this.state.data}
+            scaleData={scaleData}
+            subSettings={this.state.subSettings}
+          />
+        )
       case 'linear':
-        return (<LinearPlot {...this.state} {...styles} />)
+        return (
+          <LinearPlot
+            data={this.state.data}
+            scaleData={scaleData}
+            subSettings={this.state.subSettings}
+            interpolationType={this.state.interpolationType}
+          />
+        )
       default:
-        return (<ScatterPlot {...this.state} {...styles} />)
+        break
     }
   }
 
   render() {
     return (
-      <div className='main'>
+      <div className="main">
         <h1>React + D3 practice</h1>
         <div className="controls">
           <div
-            className={`randomize ${this.state.chartMode === 'scatter' ? 'is-active' : null}`}
+            className={`randomize ${
+              this.state.chartMode === 'scatter' ? 'is-active' : ''
+            }`}
             onMouseOver={() => this.handleMouseOver('scatter')}
+            onFocus={() => this.handleMouseOver('scatter')}
           >
             Scatter
           </div>
           <div
-            className={`randomize ${this.state.chartMode === 'linear' ? 'is-active' : null}`}
+            className={`randomize ${
+              this.state.chartMode === 'linear' ? 'is-active' : ''
+            }`}
             onMouseOver={() => this.handleMouseOver('linear')}
+            onFocus={() => this.handleMouseOver('linear')}
           >
             linear
           </div>
@@ -102,10 +145,13 @@ export default class Chart extends React.Component {
           {this.renderChart()}
         </svg>
         {this.state.chartMode === 'linear' ? (
-          <SubToolBar 
+          <SubToolBar
             interpolationType={this.state.interpolationType}
-            onSelectSubType={(interpolationType) => this.handleSelectSubType(interpolationType)}
-          />) : null}
+            onSelectSubType={interpolationType =>
+              this.handleSelectSubType(interpolationType)
+            }
+          />
+        ) : null}
       </div>
     )
   }
